@@ -22,6 +22,11 @@ class Picture
      */
     private $file;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Trick", inversedBy="pictures")
+     */
+    private $trick;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -35,6 +40,18 @@ class Picture
     public function setFile(string $file): self
     {
         $this->file = $file;
+
+        return $this;
+    }
+
+    public function getTrick(): ?Trick
+    {
+        return $this->trick;
+    }
+
+    public function setTrick(?Trick $trick): self
+    {
+        $this->trick = $trick;
 
         return $this;
     }
