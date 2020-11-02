@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello TricksController!{% endblock %}
+{% block title %}La page des figures{% endblock %}
 
 {% block body %}
 <style>
@@ -9,12 +9,18 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello ! ✅</h1>
+    <a href="{{ path('trick_new') }}">Ajouter une figure</a>
+    <h2>Voici toutes les figures :</h2>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/wamp64/www/snowtricks_v2/src/Controller/TricksController.php'|file_link(0) }}">src/Controller/TricksController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/wamp64/www/snowtricks_v2/templates/tricks/index.html.twig'|file_link(0) }}">templates/tricks/index.html.twig</a></code></li>
-    </ul>
+    {% for trick in trick %}
+        <div class="article-card">
+            <h3><a href="{{ path('trick_show', {'id': trick.id}) }}">{{ trick.title }}</a></h3>
+            <p>{{ trick.description }}</p>
+            <span class="date">{{ trick.createdAt|date('d/m/Y') }}</span>
+        </div>
+    {% endfor %}
+
+
 </div>
 {% endblock %}
