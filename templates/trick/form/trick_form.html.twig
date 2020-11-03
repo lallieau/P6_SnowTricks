@@ -1,0 +1,19 @@
+{{ form_start(form) }}
+
+<div class="input-field col s12 m6 l6">
+    {{ form_label(form.title, 'Titre :') }}
+    {{ form_widget(form.title) }}
+    <span class="error">{{ form_errors(form.title) }}</span>
+</div>
+
+<div class="input-field col s12 m12 l12">
+    {{ form_label(form.description, 'Description :') }}
+    {{ form_widget(form.description) }}
+    <span class="error">{{ form_errors(form.description) }}</span>
+</div>
+
+<div class="input-field col s12 m12 l12">
+    <input type="submit" name="" value="Enregistrer" class="btn btn-primary">
+</div>
+
+{{ form_end(form) }}
