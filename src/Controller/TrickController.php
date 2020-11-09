@@ -2,14 +2,15 @@
 
 namespace App\Controller;
 
-
+use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\TrickType;
+use App\Form\CommentType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 class TrickController extends AbstractController
@@ -59,10 +60,29 @@ class TrickController extends AbstractController
     /**
      * @Route("/trick/show/{id}", name="trick_show")
      */
-    public function show(Trick $trick)
+    public function show(Trick $trick, Request $request)
     {
+        $comment = new Comment();
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $comment->setCreatedAt(new \DateTime());
+            $comment->setTrick($trick);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+
+            $this->addFlash(
+                'notice',
+                'Le commentaire a été enregistré.');
+        }
+
         return $this->render('trick/show.html.twig', [
-            'trick' => $trick
+            'trick' => $trick,
+            'form' => $form->createView()
         ]);
     }
 
@@ -99,6 +119,11 @@ class TrickController extends AbstractController
      */
     public function remove(Trick $trick)
     {
+        foreach ($trick->getComments() as $comment)
+        {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($comment);
+        }
         $em = $this->getDoctrine()->getManager();
         $em->remove($trick);
         $em->flush();
