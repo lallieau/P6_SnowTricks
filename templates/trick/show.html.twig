@@ -10,12 +10,17 @@
 
     <div class="trick-show">
         <h1>La figure ! ✅</h1>
-        <a href="{{ path('trick_edit', {'id': trick.id}) }}">Modifier la figure</a>
+        {% if is_granted('ROLE_EDITOR') %}
+            <a href="{{ path('trick_edit', {'id': trick.id}) }}">Modifier la figure</a>
+        {% endif %}
         <h2>{{ trick.title }}</h2>
         <p>{{ trick.description }}</p>
         <span class="date">{{ trick.createdAt|date('d/m/Y') }}</span>
         <br><br>
-        <a href="{{ path('trick_remove', {'id': trick.id}) }}">Supprimer la figure</a>
+        {% if is_granted('ROLE_EDITOR') %}
+            <a href="{{ path('trick_remove', {'id': trick.id}) }}">Supprimer la figure</a>
+        {% endif %}
+
     </div>
 
     <div class="trick-comment-show">
@@ -26,6 +31,8 @@
     </div>
 
     <div class="trick-comment-add">
-        {% include "trick/form/comment_form.html.twig" %}
+        {% if is_granted('ROLE_EDITOR') %}
+            {% include "trick/form/comment_form.html.twig" %}
+        {% endif %}
     </div>
 {% endblock %}
