@@ -8,16 +8,18 @@
         .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
     </style>
 
+    {#if user id == session id user#}
+
     <div class="trick-show">
         <h1>La figure ! ✅</h1>
-        {% if app.user %}
+        {% if trick.user.id == app.token.user.id %}
             <a href="{{ path('trick_edit', {'id': trick.id}) }}">Modifier la figure</a>
         {% endif %}
         <h2>{{ trick.title }}</h2>
         <p>{{ trick.description }}</p>
         <span class="date">{{ trick.createdAt|date('d/m/Y') }}</span>
         <br><br>
-        {% if app.user %}
+        {% if trick.user.id == app.token.user.id %}
             <a href="{{ path('trick_remove', {'id': trick.id}) }}">Supprimer la figure</a>
         {% endif %}
 
@@ -28,9 +30,13 @@
         {% for comment in trick.comments %}
         <p>{{ comment.user.username }}</p>
         <p>{{ comment.content }}</p>
+        {% else %}
+        <div class="trick-comment-show">
+            <p>Il n'y a pas encore de commentaire sur cette figure.</p>
+        </div>
         {% endfor %}
     </div>
-{#if user id == session id user#}
+
     <div class="trick-comment-add">
         {% if app.user %}
             {% include "trick/form/comment_form.html.twig" %}

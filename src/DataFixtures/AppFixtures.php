@@ -93,8 +93,8 @@ class AppFixtures extends Fixture
         $trick5
             ->setUser($user2)
             ->setCreatedAt(new \DateTime())
-            ->setTitle('Tailfish')
-            ->setDescription('Similaire dans la convention de dénomination d\'un Tindy, Tailfish est un portemanteau de «Tail» et «Stalefish». La main arrière saisit le bord du talon entre la fixation arrière et la queue.');
+            ->setTitle('Tailslide')
+            ->setDescription('Similaire à un boardslide ou à un lipslide, mais seule la queue de la planche est sur la fonction. Des glissades correctes sont effectuées avec la fonction directement sous le pied arrière ou plus loin vers la queue. [1]');
 
         $manager->persist($trick5);
 
@@ -102,8 +102,8 @@ class AppFixtures extends Fixture
         $trick6
             ->setUser($user)
             ->setCreatedAt(new \DateTime())
-            ->setTitle('Taipan air')
-            ->setDescription('La main arrière saisit le bord des orteils juste devant le pied arrière. Cependant, le bras doit faire le tour de l\'extérieur de votre genou arrière. La planche est ensuite tirée derrière le cavalier (peaufinée). Le nom Taipan est un portemanteau de la queue / air du Japon.');
+            ->setTitle('Boardslide')
+            ->setDescription('Une glissade effectuée lorsque le pied menant du cavalier passe au-dessus du rail à l\'approche, avec leur snowboard se déplaçant perpendiculairement le long du rail ou d\'un autre obstacle. [1] Lors de l\'exécution d\'un boardlide frontside, le snowboardeur est face à la montée. Lors d\'un boardlide arrière, un snowboardeur fait face à la descente. Ceci est souvent déroutant pour les nouveaux riders qui apprennent le truc, car avec un boardlide frontside vous reculez et avec un boardlide backside vous avancez.');
 
         $manager->persist($trick6);
 
@@ -111,8 +111,8 @@ class AppFixtures extends Fixture
         $trick7
             ->setUser($user)
             ->setCreatedAt(new \DateTime())
-            ->setTitle('Tindy')
-            ->setDescription('La prise de tindy est une prise controversée, et le nom est un portemanteau de «queue» et «indy». La main de fuite saisit entre la fixation arrière et la queue sur le bord des orteils.');
+            ->setTitle('Noseblunt')
+            ->setDescription('Une glissade effectuée là où le pied arrière du coureur passe au-dessus du rail à l\'approche, avec son snowboard se déplaçant perpendiculairement et son pied avant directement au-dessus du rail ou d\'un autre obstacle (comme une glissade nasale). Lors de l\'exécution d\'un noseblunt frontside, le snowboarder est face à la descente. Lors de l\'exécution d\'un noseblunt arrière, le snowboardeur est face à la montée.');
 
         $manager->persist($trick7);
 

@@ -32,7 +32,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_EDITOR")
+     * @IsGranted("ROLE_USER")
      * @Route("/trick/new", name="trick_new")
      */
     public function new(Request $request)
@@ -67,7 +67,7 @@ class TrickController extends AbstractController
     public function show(Trick $trick, Request $request)
     {
         $comment = new Comment();
-        $comment->setUser($this->getUser());
+
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
@@ -75,6 +75,7 @@ class TrickController extends AbstractController
         {
             $comment->setCreatedAt(new \DateTime());
             $comment->setTrick($trick);
+            $comment->setUser($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
@@ -91,12 +92,13 @@ class TrickController extends AbstractController
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'user' => $this->getUser()
         ]);
     }
 
     /**
-     * @IsGranted("ROLE_EDITOR")
+     * @IsGranted("ROLE_USER")
      * @Route("/trick/edit/{id}", name="trick_edit")
      */
     public function edit(Request $request, Trick $trick)
@@ -125,7 +127,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @IsGranted("ROLE_EDITOR")
+     * @IsGranted("ROLE_USER")
      * @Route("/trick/remove/{id}", name="trick_remove")
      */
     public function remove(Trick $trick)
