@@ -67,6 +67,7 @@ class TrickController extends AbstractController
     public function show(Trick $trick, Request $request)
     {
         $comment = new Comment();
+        $comment->setUser($this->getUser());
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
@@ -82,6 +83,10 @@ class TrickController extends AbstractController
             $this->addFlash(
                 'notice',
                 'Le commentaire a été enregistré.');
+
+            return $this->redirectToRoute('trick_show', [
+                'id' => $trick->getId(),
+            ]);
         }
 
         return $this->render('trick/show.html.twig', [
