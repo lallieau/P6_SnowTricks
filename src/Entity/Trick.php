@@ -59,6 +59,12 @@ class Trick
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="tricks")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $category;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -217,6 +223,18 @@ class Trick
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

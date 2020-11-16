@@ -13,6 +13,11 @@
 </div>
 
 <div class="input-field col s12 m12 l12">
+    {{ form_row(form.category) }}
+    <span class="error">{{ form_errors(form.category) }}</span>
+</div>
+
+<div class="input-field col s12 m12 l12">
     <input type="submit" name="" value="Enregistrer" class="btn btn-primary">
 </div>
 
