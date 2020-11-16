@@ -16,6 +16,7 @@
             <a href="{{ path('trick_edit', {'id': trick.id}) }}">Modifier la figure</a>
         {% endif %}
         <h2>{{ trick.title }}</h2>
+        <h3>Catégorie : {{ trick.category.name }}</h3>
         <p>{{ trick.description }}</p>
         <span class="date">{{ trick.createdAt|date('d/m/Y') }}</span>
         <br><br>
