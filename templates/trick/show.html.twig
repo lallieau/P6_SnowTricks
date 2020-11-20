@@ -12,7 +12,10 @@
 
     <div class="trick-show">
         <h1>La figure ! ✅</h1>
+        {#
         {% if trick.user.id == app.token.user.id %}
+        #}
+        {% if app.user %}
             <a href="{{ path('trick_edit', {'id': trick.id}) }}">Modifier la figure</a>
         {% endif %}
         <h2>{{ trick.title }}</h2>
@@ -20,7 +23,10 @@
         <p>{{ trick.description }}</p>
         <span class="date">{{ trick.createdAt|date('d/m/Y') }}</span>
         <br><br>
+        {#
         {% if trick.user.id == app.token.user.id %}
+        #}
+        {% if app.user %}
             <a href="{{ path('trick_remove', {'id': trick.id}) }}">Supprimer la figure</a>
         {% endif %}
 
