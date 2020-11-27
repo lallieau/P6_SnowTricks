@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/trick", name="trick_index")
+     * @Route("/", name="trick_home")
      */
     public function index(): Response
     {

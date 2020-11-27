@@ -2,35 +2,62 @@
 
 namespace App\Controller;
 
+
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+
+use App\Entity\User;
+use App\Form\RegistrationType;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="app_login")
+     * @Route("/inscription", name="security_registration")
+     * @param Request $request
+     * @param EntityManagerInterface $manager
+     * @param UserPasswordEncoderInterface $encoder
+     * @return Response
      */
-    public function login(AuthenticationUtils $authenticationUtils): Response
+    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('target_path');
-        // }
+        $user = new User;
+        $form = $this->createForm(RegistrationType::class, $user);
 
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $form->handleRequest($request);
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $hash = $encoder->encodePassword($user, $user->getPassword());
+
+            $user->setPassword($hash);
+
+            $manager->persist($user);
+            $manager->flush();
+
+            return $this->redirectToRoute('security_login');
+        }
+
+        return $this->render('security/registration.html.twig', [
+            'form' => $form->createView()
+        ]);
     }
 
     /**
-     * @Route("/logout", name="app_logout")
+     * @param Request $request
+     * @return Response
+     * @Route("/connexion", name="security_login")
      */
-    public function logout()
+    public function login()
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        return $this->render('security/login.html.twig');
     }
+
+    /**
+     * @Route("/deconnexion", name="security_logout")
+     */
+    public function logout() {}
 }
