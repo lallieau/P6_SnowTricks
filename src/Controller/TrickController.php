@@ -10,13 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 
 
 class TrickController extends AbstractController
 {
     /**
-     * @Route("/trick", name="trick_index")
+     * @Route("/", name="trick_home")
      */
     public function index(): Response
     {
@@ -29,6 +32,7 @@ class TrickController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/trick/new", name="trick_new")
      */
     public function new(Request $request)
@@ -63,6 +67,7 @@ class TrickController extends AbstractController
     public function show(Trick $trick, Request $request)
     {
         $comment = new Comment();
+
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
@@ -70,6 +75,7 @@ class TrickController extends AbstractController
         {
             $comment->setCreatedAt(new \DateTime());
             $comment->setTrick($trick);
+            $comment->setUser($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($comment);
@@ -78,15 +84,21 @@ class TrickController extends AbstractController
             $this->addFlash(
                 'notice',
                 'Le commentaire a été enregistré.');
+
+            return $this->redirectToRoute('trick_show', [
+                'id' => $trick->getId(),
+            ]);
         }
 
         return $this->render('trick/show.html.twig', [
             'trick' => $trick,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'user' => $this->getUser()
         ]);
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/trick/edit/{id}", name="trick_edit")
      */
     public function edit(Request $request, Trick $trick)
@@ -115,6 +127,7 @@ class TrickController extends AbstractController
     }
 
     /**
+     * @IsGranted("ROLE_USER")
      * @Route("/trick/remove/{id}", name="trick_remove")
      */
     public function remove(Trick $trick)

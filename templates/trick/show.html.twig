@@ -8,24 +8,45 @@
         .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
     </style>
 
+    {#if user id == session id user#}
+
     <div class="trick-show">
         <h1>La figure ! ✅</h1>
-        <a href="{{ path('trick_edit', {'id': trick.id}) }}">Modifier la figure</a>
+        {#
+        {% if trick.user.id == app.token.user.id %}
+        #}
+        {% if app.user %}
+            <a href="{{ path('trick_edit', {'id': trick.id}) }}">Modifier la figure</a>
+        {% endif %}
         <h2>{{ trick.title }}</h2>
+        <h3>Catégorie : {{ trick.category.name }}</h3>
         <p>{{ trick.description }}</p>
         <span class="date">{{ trick.createdAt|date('d/m/Y') }}</span>
         <br><br>
-        <a href="{{ path('trick_remove', {'id': trick.id}) }}">Supprimer la figure</a>
+        {#
+        {% if trick.user.id == app.token.user.id %}
+        #}
+        {% if app.user %}
+            <a href="{{ path('trick_remove', {'id': trick.id}) }}">Supprimer la figure</a>
+        {% endif %}
+
     </div>
 
     <div class="trick-comment-show">
         <h2>Les commentaires :</h2>
         {% for comment in trick.comments %}
+        <p>{{ comment.user.username }}</p>
         <p>{{ comment.content }}</p>
+        {% else %}
+        <div class="trick-comment-show">
+            <p>Il n'y a pas encore de commentaire sur cette figure.</p>
+        </div>
         {% endfor %}
     </div>
 
     <div class="trick-comment-add">
-        {% include "trick/form/comment_form.html.twig" %}
+        {% if app.user %}
+            {% include "trick/form/comment_form.html.twig" %}
+        {% endif %}
     </div>
 {% endblock %}

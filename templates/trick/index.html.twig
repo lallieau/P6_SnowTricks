@@ -10,7 +10,9 @@
 
 <div class="example-wrapper">
     <h1>Hello ! ✅</h1>
-    <a href="{{ path('trick_new') }}">Ajouter une figure</a>
+    {% if is_granted('ROLE_EDITOR') %}
+        <a href="{{ path('trick_new') }}">Ajouter une figure</a>
+    {% endif %}
     <h2>Voici toutes les figures :</h2>
 
     {% for trick in trick %}
