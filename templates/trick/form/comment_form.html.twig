@@ -1,14 +1,9 @@
 {{ form_start(form) }}
 
-<div class="input-field col s12 m6 l6">
-    {{ form_label(form.content, 'Commentaire :') }}
-    <br><br>
-    {{ form_widget(form.content) }}
-    <span class="error">{{ form_errors(form.content) }}</span>
+<div class="form-group col-5">
+    {{ form_row(form.content, {'label': 'Commentaire', 'attr': {'placeholder': 'Votre commentaire...'}}) }}
 </div>
 
-<div class="input-field col s12 m12 l12">
-    <input type="submit" name="" value="Enregistrer" class="btn btn-primary">
-</div>
+<button type="submit" class="btn btn-success">Enregistrer</button>
 
 {{ form_end(form) }}

@@ -40,11 +40,10 @@ class TrickController extends AbstractController
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
-        $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $trick->setUser($user);
+            $trick->setUser($this->getUser());
             $trick->setCreatedAt(new \DateTime());
 
             $em = $this->getDoctrine()->getManager();
