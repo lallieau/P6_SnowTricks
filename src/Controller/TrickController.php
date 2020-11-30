@@ -40,9 +40,11 @@ class TrickController extends AbstractController
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
+        $user = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            $trick->setUser($user);
             $trick->setCreatedAt(new \DateTime());
 
             $em = $this->getDoctrine()->getManager();
@@ -53,7 +55,7 @@ class TrickController extends AbstractController
                 'notice',
                 'La figure a été enregistrée.');
 
-            return $this->redirectToRoute('trick_index');
+            return $this->redirectToRoute('trick_home');
         }
         return $this->render('trick/new.html.twig', [
             'trick' => $trick,
@@ -118,7 +120,7 @@ class TrickController extends AbstractController
                 'notice',
                 'La figure a été modifiée.');
 
-            return $this->redirectToRoute('trick_index');
+            return $this->redirectToRoute('trick_home');
         }
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
@@ -145,6 +147,6 @@ class TrickController extends AbstractController
             'notice',
             'La figure a été supprimée.');
 
-        return $this->redirectToRoute('trick_index');
+        return $this->redirectToRoute('trick_home');
     }
 }
