@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 
+use App\Repository\UserRepository;
 use App\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -23,10 +24,20 @@ class SecurityController extends AbstractController
      * @var MailerInterface
      */
     private $mailer;
+    /**
+     * @var UserRepository
+     */
+    private $userRepository;
 
-    public function __construct(Mailer $mailer)
+    /**
+     * SecurityController constructor.
+     * @param Mailer $mailer
+     * @param UserRepository $userRepository
+     */
+    public function __construct(Mailer $mailer, UserRepository $userRepository)
     {
         $this->mailer = $mailer;
+        $this->userRepository = $userRepository;
     }
 
     /**
@@ -79,6 +90,34 @@ class SecurityController extends AbstractController
      */
     public function logout() {}
 
+    /**
+     * @Route("confirmation-compte/{token}", name="confirm_account")
+     * @param string $token
+     */
+    public function confirmAccount(string $token)
+    {
+        $user = $this->userRepository->findOneBy([
+            "token" => $token
+        ]);
+
+        if($user)
+        {
+            $user->setToken(null);
+            $user->setIsVerified(true);
+
+            $manager = $this->getDoctrine()->getManager();
+            $manager->persist($user);
+            $manager->flush();
+
+            $this->addFlash("success", "Compte actif !" );
+            return $this->redirectToRoute('trick_home');
+        }
+        else
+        {
+            $this->addFlash("error", "Ce compte n'existe pas." );
+            return $this->redirectToRoute('trick_home');
+        }
+    }
 
     /**
      * @return string

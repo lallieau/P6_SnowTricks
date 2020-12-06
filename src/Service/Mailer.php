@@ -5,6 +5,7 @@ namespace App\Service;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 
 class Mailer
 {
@@ -26,7 +27,7 @@ class Mailer
     public function sendEmail($email, $token)
     {
         $email = (new TemplatedEmail())
-            ->from('register@example.com')
+            ->from('test42@gmail.com')
             ->to(new Address($email))
             ->subject('Confirmez votre adress email')
 
