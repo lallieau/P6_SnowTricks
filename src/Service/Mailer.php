@@ -24,14 +24,14 @@ class Mailer
         $this->mailer = $mailer;
     }
 
-    public function sendEmail($email, $token, $subject)
+    public function sendEmail($email, $token, $subject, $path)
     {
         $email = (new TemplatedEmail())
             ->from('test@gmail.com')
             ->to(new Address($email))
             ->subject($subject)
 
-            ->htmlTemplate('email/confirm_email.html.twig')
+            ->htmlTemplate($path)
 
             ->context([
                 'expiration_date' => new \DateTime('+7 days'),
