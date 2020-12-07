@@ -24,12 +24,12 @@ class Mailer
         $this->mailer = $mailer;
     }
 
-    public function sendEmail($email, $token)
+    public function sendEmail($email, $token, $subject)
     {
         $email = (new TemplatedEmail())
             ->from('test@gmail.com')
             ->to(new Address($email))
-            ->subject('Réinitialisation mot de passe')
+            ->subject($subject)
 
             ->htmlTemplate('email/confirm_email.html.twig')
 
@@ -37,16 +37,16 @@ class Mailer
                 'expiration_date' => new \DateTime('+7 days'),
                 'token' => $token,
             ]);
-
         $this->mailer->send($email);
     }
 
+/*
     public function sendEmailResetPassword($email, $token)
     {
         $email = (new TemplatedEmail())
             ->from('test@gmail.com')
             ->to(new Address($email))
-            ->subject('Confirmez votre adress email')
+            ->subject('Réinitialisation mot de passe')
 
             ->htmlTemplate('email/reset_password_email.html.twig')
 
@@ -57,5 +57,5 @@ class Mailer
 
         $this->mailer->send($email);
     }
-
+*/
 }

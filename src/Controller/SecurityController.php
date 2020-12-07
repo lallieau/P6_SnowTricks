@@ -48,11 +48,10 @@ class SecurityController extends AbstractController
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param UserPasswordEncoderInterface $encoder
-     * @param MailerInterface $mailer
+     * @param TokenGeneratorInterface $tokenGenerator
      * @return Response
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+    public function registration(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder, TokenGeneratorInterface $tokenGenerator)
     {
         $user = new User;
         $form = $this->createForm(RegistrationType::class, $user);
@@ -64,11 +63,12 @@ class SecurityController extends AbstractController
             $hash = $encoder->encodePassword($user, $user->getPassword());
 
             $user->setPassword($hash);
-            $user->setToken($this->generateToken());
+            $user->setToken($tokenGenerator->generateToken());
 
             $manager->persist($user);
             $manager->flush();
-            $this->mailer->sendEmail($user->getEmail(), $user->getToken());
+
+            $this->mailer->sendEmail($user->getEmail(), $user->getToken(), 'Confirmez votre adresse email');
 
             return $this->redirectToRoute('security_login');
         }
@@ -209,11 +209,4 @@ class SecurityController extends AbstractController
         }
     }
 
-    /**
-     * @return string
-     */
-    private function generateToken()
-    {
-        return rtrim(strtr(base64_encode(random_bytes(32)), '+/', '-_'),  '=');
-    }
 }
