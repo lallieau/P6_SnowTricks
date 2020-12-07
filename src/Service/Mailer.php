@@ -27,14 +27,29 @@ class Mailer
     public function sendEmail($email, $token)
     {
         $email = (new TemplatedEmail())
-            ->from('test42@gmail.com')
+            ->from('test@gmail.com')
+            ->to(new Address($email))
+            ->subject('Réinitialisation mot de passe')
+
+            ->htmlTemplate('email/confirm_email.html.twig')
+
+            ->context([
+                'expiration_date' => new \DateTime('+7 days'),
+                'token' => $token,
+            ]);
+
+        $this->mailer->send($email);
+    }
+
+    public function sendEmailResetPassword($email, $token)
+    {
+        $email = (new TemplatedEmail())
+            ->from('test@gmail.com')
             ->to(new Address($email))
             ->subject('Confirmez votre adress email')
 
-            // path of the Twig template to render
-            ->htmlTemplate('email/confirm_email.html.twig')
+            ->htmlTemplate('email/reset_password_email.html.twig')
 
-            // pass variables (name => value) to the template
             ->context([
                 'expiration_date' => new \DateTime('+7 days'),
                 'token' => $token,
