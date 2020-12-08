@@ -1,14 +1,10 @@
 {{ form_start(form) }}
-
-<div class="input-field col s12 m6 l6">
-    {{ form_label(form.content, 'Commentaire :') }}
-    <br><br>
-    {{ form_widget(form.content) }}
-    <span class="error">{{ form_errors(form.content) }}</span>
+<div class="form-group mx-auto row justify-content-center align-items-center">
+    <div class="form-group col-9">
+    {{ form_row(form.content, {'label': '  ', 'attr': {'placeholder': 'Laisser un commentaire...'}}) }}
+    </div>
+    <div class="float-none">
+    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+    </div>
 </div>
-
-<div class="input-field col s12 m12 l12">
-    <input type="submit" name="" value="Enregistrer" class="btn btn-primary">
-</div>
-
 {{ form_end(form) }}
