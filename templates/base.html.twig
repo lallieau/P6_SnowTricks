@@ -42,12 +42,25 @@
             </ul>
         </div>
     </nav>
-    {% for label, messages in app.flashes(['success', 'warning', 'error', 'notice']) %}
-        {% for message in messages %}
-            <div class="flash-{{ label }}">
-                {{ message }}
-            </div>
-        {% endfor %}
+
+    {% for message in app.flashes('success') %}
+    <div class="alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <div class="flash-notice">
+            <strong>Succès !</strong>
+            {{ message }}
+        </div>
+    </div>
+    {% endfor %}
+
+    {% for message in app.flashes('error') %}
+    <div class="alert alert-dismissible alert-danger">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <div class="flash-error">
+            <strong>Erreur !</strong>
+            {{ message }}
+        </div>
+    </div>
     {% endfor %}
 
     {% block body %}{% endblock %}

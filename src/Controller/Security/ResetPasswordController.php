@@ -42,7 +42,7 @@ class ResetPasswordController extends AbstractController
 
 
     /**
-     * @Route("/oubli-mot-de-passe", name="forgot_password")
+     * @Route("snowtricks/connexion/oubli-mot-de-passe", name="forgot_password")
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param UserRepository $users
@@ -80,7 +80,7 @@ class ResetPasswordController extends AbstractController
 
 
     /**
-     * @Route("/reinitialiser-mot-de-passe/{token}", name="reset_password")
+     * @Route("/snowtricks/reinitialiser-mot-de-passe/{token}", name="reset_password")
      * @param Request $request
      * @param string $token
      * @param EntityManagerInterface $manager

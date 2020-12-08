@@ -40,7 +40,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("/inscription", name="security_registration")
+     * @Route("/snowtricks/inscription", name="security_registration")
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param UserPasswordEncoderInterface $encoder
@@ -75,7 +75,7 @@ class RegistrationController extends AbstractController
     }
 
     /**
-     * @Route("confirmation-compte/{token}", name="confirm_account")
+     * @Route("/snowtricks/confirmation-compte/{token}", name="confirm_account")
      * @param string $token
      */
     public function confirmAccount(string $token)

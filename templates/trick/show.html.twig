@@ -11,13 +11,53 @@
     {#if user id == session id user#}
 
     <div class="trick-show">
-        <h1>La figure ! ✅</h1>
-        <h2>{{ trick.title }}</h2>
-        <h3>Catégorie : {{ trick.category.name }}</h3>
+        {% if app.user %}
+            <a href="{{ path('trick_edit', {'title': trick.title}) }}" data-toggle="tooltip" data-placement="top" title="Modifier la figure"><i class="fas fa-pen"></i></a>
+            <a href="{{ path('trick_remove', {'id': trick.id}) }}" data-toggle="tooltip" data-placement="top" title="Supprimer la figure"><i class="fas fa-trash-alt"></i></a>
+        {% endif %}
+        <h1>{{ trick.title }}</h1>
+
+        <div class="row mx-auto justify-content-center">
+            <div class="card col-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
+                        <rect width="100%" height="100%" fill="#868e96"></rect>
+                        <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image</text>
+                    </svg>
+            </div>
+            <div class="card col-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
+                        <rect width="100%" height="100%" fill="#868e96"></rect>
+                        <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image</text>
+                    </svg>
+            </div>
+            <div class="card col-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="200" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
+                        <rect width="100%" height="100%" fill="#868e96"></rect>
+                        <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image</text>
+                    </svg>
+            </div>
+        </div>
+
         <p>{{ trick.description }}</p>
-        <span class="date">{{ trick.createdAt|date('d/m/Y') }}</span>
+        <div class="row col-12 mx-auto justify-content-center">
+            <span class="badge badge-primary">catégorie : {{ trick.category.name }}</span>
+            <span class="badge badge-primary">ajoutée le : {{ trick.createdAt|date('d/m/Y') }}</span>
+            {% if trick.updatedAt %}
+            <span class="badge badge-primary">modifiée le : {{ trick.updatedAt|date('d/m/Y') }}</span>
+            {% endif %}
+        </div>
         <br><br>
     </div>
+
+    <hr>
+
+    <div class="trick-comment-add">
+        {% if app.user %}
+            {% include "trick/form/comment_form.html.twig" %}
+        {% endif %}
+    </div>
+
+    <hr>
 
     <div class="trick-comment-show">
         {% if trick.comments | length <= 1 %}
@@ -27,10 +67,14 @@
         {% endif %}
 
         {% for comment in trick.comments %}
-        <div class="row">
-            <div class="col-3">
+        <div class="row justify-content-center">
+            <div class="col-3 row">
+                <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none rounded-circle" width="50" height="50" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
+                    <rect width="100%" height="100%" fill="#868e96"></rect>
+                    <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image</text>
+                </svg>
                 {{ comment.user.username }}
-                <small>({{ comment.createdAt|date('d/m/y H:i') }})</small>
+                {# <small>({{ comment.createdAt|date('d/m/y H:i') }})</small> #}
             </div>
             <div class="col">
                 <p>{{ comment.content }}</p>
@@ -43,9 +87,4 @@
         {% endfor %}
     </div>
 
-    <div class="trick-comment-add">
-        {% if app.user %}
-            {% include "trick/form/comment_form.html.twig" %}
-        {% endif %}
-    </div>
 {% endblock %}

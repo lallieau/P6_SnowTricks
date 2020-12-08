@@ -6,9 +6,12 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @UniqueEntity(fields={"title"}, message="Ce titre est déjà utilisé.")
  */
 class Trick
 {
@@ -20,12 +23,22 @@ class Trick
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\Length(
+     * min=3,
+     * max=25,
+     * minMessage="Le titre de la figure doit contenir plus de 3 caractères.",
+     * maxMessage="Le titre de la figure ne peut pas contenir plus de 25 caractères."
+     * )
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Length(
+     * min=5,
+     * minMessage="Le descriptif de la figure doit contenir plus de 5 caractères."
+     * )
      */
     private $description;
 

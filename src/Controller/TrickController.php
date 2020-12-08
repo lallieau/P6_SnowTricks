@@ -33,7 +33,7 @@ class TrickController extends AbstractController
 
     /**
      * @IsGranted("ROLE_USER")
-     * @Route("/trick/new", name="trick_new")
+     * @Route("snowtricks/ajouter-une-figure", name="trick_new")
      */
     public function new(Request $request)
     {
@@ -51,8 +51,8 @@ class TrickController extends AbstractController
             $em->flush();
 
             $this->addFlash(
-                'notice',
-                'La figure a été enregistrée.');
+                'success',
+                'La figure a été enregistrée avec succès.');
 
             return $this->redirectToRoute('trick_home');
         }
@@ -63,7 +63,7 @@ class TrickController extends AbstractController
     }
 
     /**
-     * @Route("/trick/show/{id}", name="trick_show")
+     * @Route("/snowtricks/figure/{title}", name="trick_show")
      */
     public function show(Trick $trick, Request $request)
     {
@@ -83,11 +83,11 @@ class TrickController extends AbstractController
             $em->flush();
 
             $this->addFlash(
-                'notice',
-                'Le commentaire a été enregistré.');
+                'success',
+                'Le commentaire a été enregistré avec succès.');
 
             return $this->redirectToRoute('trick_show', [
-                'id' => $trick->getId(),
+                'title' => $trick->getTitle(),
             ]);
         }
 
@@ -100,7 +100,7 @@ class TrickController extends AbstractController
 
     /**
      * @IsGranted("ROLE_USER")
-     * @Route("/trick/edit/{id}", name="trick_edit")
+     * @Route("/snowtricks/modifier-la-figure/{title}", name="trick_edit")
      */
     public function edit(Request $request, Trick $trick)
     {
@@ -116,8 +116,8 @@ class TrickController extends AbstractController
             $em->flush();
 
             $this->addFlash(
-                'notice',
-                'La figure a été modifiée.');
+                'success',
+                'La figure a été modifiée avec succès.');
 
             return $this->redirectToRoute('trick_home');
         }
@@ -129,7 +129,7 @@ class TrickController extends AbstractController
 
     /**
      * @IsGranted("ROLE_USER")
-     * @Route("/trick/remove/{id}", name="trick_remove")
+     * @Route("/snowtrick/supprimer-la-figure/{id}", name="trick_remove")
      */
     public function remove(Trick $trick)
     {
@@ -143,8 +143,8 @@ class TrickController extends AbstractController
         $em->flush();
 
         $this->addFlash(
-            'notice',
-            'La figure a été supprimée.');
+            'success',
+            'La figure a été supprimée définitivement.');
 
         return $this->redirectToRoute('trick_home');
     }
