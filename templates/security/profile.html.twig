@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block body %}
+    <h1>Profil</h1>
+    {{ user.email }}<br>
+    {{ user.username }}<br>
+    <a href="{{ path('update_password') }}">Modifier mot de passe</a>
+
+<hr>
+    {% for trick in user.tricks %}
+        {{ trick.title }}<br>
+    {% endfor %}
+{% endblock %}

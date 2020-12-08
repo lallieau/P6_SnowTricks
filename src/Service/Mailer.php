@@ -40,22 +40,4 @@ class Mailer
         $this->mailer->send($email);
     }
 
-/*
-    public function sendEmailResetPassword($email, $token)
-    {
-        $email = (new TemplatedEmail())
-            ->from('test@gmail.com')
-            ->to(new Address($email))
-            ->subject('Réinitialisation mot de passe')
-
-            ->htmlTemplate('email/reset_password_email.html.twig')
-
-            ->context([
-                'expiration_date' => new \DateTime('+7 days'),
-                'token' => $token,
-            ]);
-
-        $this->mailer->send($email);
-    }
-*/
 }

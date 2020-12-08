@@ -74,7 +74,7 @@
                     <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image</text>
                 </svg>
                 {{ comment.user.username }}
-                {# <small>({{ comment.createdAt|date('d/m/y H:i') }})</small> #}
+                <small>({{ comment.createdAt|date('d/m/y H:i') }})</small>
             </div>
             <div class="col">
                 <p>{{ comment.content }}</p>

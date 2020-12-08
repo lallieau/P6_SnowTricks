@@ -20,36 +20,16 @@ use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 
 class ResetPasswordController extends AbstractController
 {
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * SecurityController constructor.
-     * @param Mailer $mailer
-     * @param UserRepository $userRepository
-     */
-    public function __construct(Mailer $mailer, UserRepository $userRepository)
-    {
-        $this->mailer = $mailer;
-        $this->userRepository = $userRepository;
-    }
-
 
     /**
      * @Route("snowtricks/connexion/oubli-mot-de-passe", name="forgot_password")
      * @param Request $request
      * @param EntityManagerInterface $manager
-     * @param UserRepository $users
+     * @param UserRepository $userRepository
      * @param TokenGeneratorInterface $tokenGenerator
      * @return Response
      */
-        public function forgotPassword(Request $request, EntityManagerInterface $manager, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator): Response
+        public function forgotPassword(Request $request, EntityManagerInterface $manager, Mailer $mailer, UserRepository $userRepository, TokenGeneratorInterface $tokenGenerator): Response
         {
             $form = $this->createForm(ForgotPasswordType::class);
             $form->handleRequest($request);
@@ -69,7 +49,7 @@ class ResetPasswordController extends AbstractController
                     $manager->persist($user);
                     $manager->flush();
 
-                    $this->mailer->sendEmail($user->getEmail(), $user->getResetToken(), 'Réinitialisez votre mot de passe', 'email/reset_password_email.html.twig');
+                    $mailer->sendEmail($user->getEmail(), $user->getResetToken(), 'Réinitialisez votre mot de passe', 'email/reset_password_email.html.twig');
 
                     $this->addFlash('success', 'Un email de réinitialisation vous a été envoyé.');
                     return $this->redirectToRoute('security_login');
@@ -84,13 +64,14 @@ class ResetPasswordController extends AbstractController
      * @param Request $request
      * @param string $token
      * @param EntityManagerInterface $manager
+     * @param UserRepository $userRepository
      * @param UserPasswordEncoderInterface $encoder
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
      */
-        public function ResetPassword(Request $request, string $token, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+        public function ResetPassword(Request $request, string $token, EntityManagerInterface $manager, UserRepository $userRepository, UserPasswordEncoderInterface $encoder)
         {
             //$user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['reset_token' => $token]);
-            $user = $this->userRepository->findOneBy([
+            $user = $userRepository->findOneBy([
                 "reset_token" => $token
             ]);
 
@@ -115,7 +96,7 @@ class ResetPasswordController extends AbstractController
 
                 $this->addFlash('success', 'Votre mot de passe a été mis à jour.');
 
-                return $this->redirectToRoute('security_login');
+                return $this->redirectToRoute('trick_home');
             }
             return $this->render('security/reset_password.html.twig', [
                 'form' => $form->createView()
