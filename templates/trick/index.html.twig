@@ -8,13 +8,18 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
-<div class="example-wrapper mx-auto">
+<div class="header-home d-flex flex-column justify-content-center">
     <h1>Bienvenue sur le site snowtricks</h1>
     <h2>Partagez vos meilleures figures avec toute la communauté snowtricks !</h2>
-    <br>
-    <h2>Toutes les figures :</h2>
-    <br>
 
+    {% if not app.user %}
+        <a class="btn btn-secondary btn-lg" href="{{ path('security_registration') }}">S'inscrire</a>
+    {% else %}
+        <a class="btn btn-secondary btn-lg" href="{{ path('trick_new') }}">Ajouter une figure</a>
+    {% endif %}
+</div>
+
+<div class="example-wrapper mx-auto">
     <div class="row mx-auto">
         {% for trick in trick %}
             <div class="card border-light mx-auto" style="max-width: 20rem; margin: 10px;">
