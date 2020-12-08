@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class AuthenticationController extends AbstractController
 {
     /**
-     * @param Request $request
      * @return Response
      * @Route("/connexion", name="security_login")
      */
