@@ -2,8 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\PictureRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints\Image;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Repository\PictureRepository;
 
 /**
  * @ORM\Entity(repositoryClass=PictureRepository::class)
@@ -20,6 +26,8 @@ class Picture
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $path;
+
     private $file;
 
     /**
@@ -32,14 +40,26 @@ class Picture
         return $this->id;
     }
 
-    public function getFile(): ?string
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(string $path): self
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    public function getFile()
     {
         return $this->file;
     }
 
-    public function setFile(string $file): self
+    public function setFile(UploadedFile $uploadedFile = null): self
     {
-        $this->file = $file;
+        $this->file = $uploadedFile;
 
         return $this;
     }

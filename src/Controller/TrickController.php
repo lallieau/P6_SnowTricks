@@ -6,6 +6,9 @@ use App\Entity\Comment;
 use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Form\CommentType;
+use App\Service\FileUploader;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,21 +37,41 @@ class TrickController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      * @Route("snowtricks/ajouter-une-figure", name="trick_new")
+     * @param Request $request
+     * @param FileUploader $fileUploader
+     * @param EntityManagerInterface $manager
+     * @return RedirectResponse|Response
      */
-    public function new(Request $request)
+    public function new(Request $request, FileUploader $fileUploader, EntityManagerInterface $manager)
     {
+
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
-
+        dump($form);
         if ($form->isSubmitted() && $form->isValid())
         {
+            $pictures = $form['pictures']->getData();
+
+            foreach($pictures as $picture)
+            {
+                $uploadedFile = $picture->getFile();
+                if($uploadedFile)
+                {
+                    $newFilename = $fileUploader->uploadPicture($uploadedFile, 'pictures');
+                    $picture->setPath($newFilename);
+                }
+
+                $picture->setTrick($trick);
+                $this->manager->persist($picture);
+            }
+
             $trick->setUser($this->getUser());
             $trick->setCreatedAt(new \DateTime());
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($trick);
-            $em->flush();
+
+            $manager->persist($trick);
+            $manager->flush();
 
             $this->addFlash(
                 'success',
