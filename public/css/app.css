@@ -1,0 +1,46 @@
+.navbar.bg-light{
+    z-index: 1;
+    position: fixed;
+    width: 100%;
+}
+h4 a{
+    text-decoration: none;
+    color: #343a40;
+}
+h4 a:hover{
+    text-decoration: none;
+    color: #343a40;
+}
+.header-home{
+    background-image: url(../images/montagne1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    text-align: center;
+    align-items: center;
+}
+
+.header-home h2{
+    text-transform: unset;
+    margin-bottom: 50px;
+}
+.header-home h1{
+    margin-top: 50px;
+    font-weight: 900;
+    font-size: 40px;
+    font-family: 'Fjalla One', sans-serif;
+
+}
+
+
+.header-trick{
+    background-image: url(../images/montagne1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    text-align: center;
+    align-items: center;
+}
+
