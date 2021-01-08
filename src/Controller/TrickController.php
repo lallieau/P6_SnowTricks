@@ -7,6 +7,7 @@ use App\Entity\Trick;
 use App\Form\TrickType;
 use App\Form\CommentType;
 use App\Service\FileUploader;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,7 @@ class TrickController extends AbstractController
         $trick = new Trick();
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
-        dump($form);
+
         if ($form->isSubmitted() && $form->isValid())
         {
             $pictures = $form['pictures']->getData();
@@ -63,7 +64,7 @@ class TrickController extends AbstractController
                 }
 
                 $picture->setTrick($trick);
-                $this->manager->persist($picture);
+                $manager->persist($picture);
             }
 
             $trick->setUser($this->getUser());
@@ -125,13 +126,38 @@ class TrickController extends AbstractController
      * @IsGranted("ROLE_USER")
      * @Route("/snowtricks/modifier-la-figure/{title}", name="trick_edit")
      */
-    public function edit(Request $request, Trick $trick)
+    public function edit(Request $request, Trick $trick, FileUploader $fileUploader, EntityManagerInterface $manager)
     {
+        $originalPictures = new ArrayCollection();
+
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
+            foreach ($originalPictures as $picture)
+            {
+                if (false === $trick->getPictures()->contains($picture)) {
+                    $picture->getTrick()->removeElement($trick);
+                    $manager->persist($picture);
+                }
+            }
+
+            $pictures = $form['pictures']->getData();
+
+            foreach($pictures as $picture)
+            {
+                $uploadedFile = $picture->getFile();
+                if($uploadedFile)
+                {
+                    $newFilename = $fileUploader->uploadPicture($uploadedFile, 'pictures');
+                    $picture->setPath($newFilename);
+                }
+
+                $picture->setTrick($trick);
+                $manager->persist($picture);
+            }
+
             $trick->setUpdatedAt(new \DateTime());
 
             $em = $this->getDoctrine()->getManager();
