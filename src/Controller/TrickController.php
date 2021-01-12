@@ -133,6 +133,8 @@ class TrickController extends AbstractController
         $form = $this->createForm(TrickType::class, $trick);
         $form->handleRequest($request);
 
+        dump($form);
+
         if ($form->isSubmitted() && $form->isValid())
         {
             foreach ($originalPictures as $picture)
@@ -170,6 +172,7 @@ class TrickController extends AbstractController
 
             return $this->redirectToRoute('trick_home');
         }
+
         return $this->render('trick/edit.html.twig', [
             'trick' => $trick,
             'form' => $form->createView()
